@@ -1,0 +1,14 @@
+# dépendances
+node_modules/
+dist/
+.env
+.DS_Store
+
+# logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# éditeur
+.vscode/
+.idea/
