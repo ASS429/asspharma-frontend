@@ -10,7 +10,7 @@ import { Textarea } from "./ui/textarea";
 import { ImageWithFallback } from "./figma/ImageWithFallback";
 import { useMockPharmacyApi } from "../hooks/useMockPharmacyApi";
 import { WelcomeMessage } from "./PharmacyBranding";
-import { toast } from "sonner@2.0.3";
+import { toast } from "sonner";
 import { 
   Search, 
   Plus, 
