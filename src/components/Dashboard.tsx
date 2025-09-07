@@ -7,7 +7,7 @@ import { useAuth } from "../contexts/SimpleAuthContext";
 import { usePharmacyData } from "../hooks/usePharmacyData";
 import { useMockPharmacyApi } from "../hooks/useMockPharmacyApi";
 import { WelcomeMessage } from "./PharmacyBranding";
-import { toast } from "sonner@2.0.3";
+import { toast } from "sonner";
 import { 
   DollarSign, 
   Package, 
