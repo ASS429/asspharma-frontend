@@ -5,10 +5,36 @@ import { Input } from '../ui/input';
 import { Label } from '../ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '../ui/card';
 import { Alert, AlertDescription } from '../ui/alert';
-import { Eye, EyeOff, Mail, Lock, User, Phone, Building, Loader2, CheckCircle } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Phone, Building, Loader2 } from 'lucide-react';
 import { toast } from 'sonner';
 import { AuthPageBranding } from '../PharmacyBranding';
 
+/* ✅ Nouveau composant ImageWithFallback réutilisable */
+interface ImageWithFallbackProps {
+  src: string;
+  alt: string;
+  fallbackSrc: string;
+  className?: string;
+}
+
+const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ src, alt, fallbackSrc, className }) => {
+  const [imgSrc, setImgSrc] = useState(src);
+
+  const handleError = () => {
+    setImgSrc(fallbackSrc);
+  };
+
+  return (
+    <img
+      src={imgSrc}
+      alt={alt}
+      onError={handleError}
+      className={className ?? 'w-full h-full object-cover'}
+    />
+  );
+};
+
+/* ✅ Ton composant Register reste inchangé dans sa structure */
 interface RegisterProps {
   onSwitchToLogin: () => void;
 }
@@ -45,7 +71,7 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
       return false;
     }
     if (!formData.email.trim()) {
-      setError('L\'email est requis');
+      setError("L'email est requis");
       return false;
     }
     if (!formData.phone.trim()) {
@@ -85,7 +111,6 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
     if (!validateStep2()) return;
 
     setLoading(true);
@@ -99,10 +124,8 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
         city: formData.city,
         country: formData.country
       });
-      
-      if (error) {
-        throw error;
-      }
+
+      if (error) throw error;
 
       if (data.user) {
         toast.success('Compte créé avec succès!', {
@@ -111,7 +134,7 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
       }
     } catch (err: any) {
       setError(
-        err.message === 'User already registered' 
+        err.message === 'User already registered'
           ? 'Un compte existe déjà avec cet email'
           : err.message || 'Une erreur est survenue lors de la création du compte'
       );
@@ -126,7 +149,15 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
-        {/* Logo et Branding */}
+        {/* ✅ Exemple d'utilisation de ImageWithFallback pour ton branding */}
+        <ImageWithFallback
+          src="/assets/logo-asspharma.png"
+          fallbackSrc="/assets/logo-fallback.png"
+          alt="Logo AssPharma"
+          className="mx-auto h-16 w-auto mb-4"
+        />
+
+        {/* Branding existant */}
         <AuthPageBranding />
 
         <Card className="shadow-lg border-0">
@@ -141,6 +172,7 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
               <div className={`w-3 h-3 rounded-full ${step >= 2 ? 'bg-primary' : 'bg-gray-300'}`} />
             </div>
           </CardHeader>
+
           <CardContent>
             {error && (
               <Alert className="mb-4 border-destructive/20 bg-destructive/5">
@@ -148,9 +180,13 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
               </Alert>
             )}
 
-            <form onSubmit={step === 1 ? (e) => { e.preventDefault(); handleNextStep(); } : handleSubmit} className="space-y-4">
+            <form
+              onSubmit={step === 1 ? (e) => { e.preventDefault(); handleNextStep(); } : handleSubmit}
+              className="space-y-4"
+            >
               {step === 1 ? (
                 <>
+                  {/* Étape 1 : infos personnelles */}
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Nom complet</Label>
                     <div className="relative">
@@ -208,6 +244,7 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
                 </>
               ) : (
                 <>
+                  {/* Étape 2 : infos pharmacie */}
                   <div className="space-y-2">
                     <Label htmlFor="pharmacyName">Nom de la pharmacie</Label>
                     <div className="relative">
@@ -274,19 +311,10 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
                   </div>
 
                   <div className="flex gap-2">
-                    <Button 
-                      type="button" 
-                      variant="outline" 
-                      onClick={handlePrevStep}
-                      className="flex-1"
-                    >
+                    <Button type="button" variant="outline" onClick={handlePrevStep} className="flex-1">
                       Retour
                     </Button>
-                    <Button 
-                      type="submit" 
-                      className="flex-1" 
-                      disabled={loading}
-                    >
+                    <Button type="submit" className="flex-1" disabled={loading}>
                       {loading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                       Créer mon compte
                     </Button>
@@ -315,3 +343,6 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
     </div>
   );
 }
+
+/* ✅ Export possible si tu veux utiliser ImageWithFallback ailleurs */
+export { ImageWithFallback };
