@@ -9,7 +9,7 @@ import { Eye, EyeOff, Mail, Lock, User, Phone, Building, Loader2 } from 'lucide-
 import { toast } from 'sonner';
 import { AuthPageBranding } from '../PharmacyBranding';
 
-/* ✅ Nouveau composant ImageWithFallback réutilisable */
+/* ✅ Composant ImageWithFallback en export par défaut */
 interface ImageWithFallbackProps {
   src: string;
   alt: string;
@@ -34,12 +34,8 @@ const ImageWithFallback: React.FC<ImageWithFallbackProps> = ({ src, alt, fallbac
   );
 };
 
-/* ✅ Ton composant Register reste inchangé dans sa structure */
-interface RegisterProps {
-  onSwitchToLogin: () => void;
-}
-
-export default function Register({ onSwitchToLogin }: RegisterProps) {
+/* ✅ Composant Register reste utilisable via un export nommé */
+export function Register({ onSwitchToLogin }: { onSwitchToLogin: () => void }) {
   const { signUp } = useAuth();
   const [formData, setFormData] = useState({
     fullName: '',
@@ -149,7 +145,7 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
   return (
     <div className="min-h-screen bg-gradient-to-br from-green-50 to-white flex items-center justify-center p-4">
       <div className="w-full max-w-md space-y-6">
-        {/* ✅ Exemple d'utilisation de ImageWithFallback pour ton branding */}
+        {/* Exemple d'utilisation du composant ImageWithFallback */}
         <ImageWithFallback
           src="/assets/logo-asspharma.png"
           fallbackSrc="/assets/logo-fallback.png"
@@ -157,7 +153,6 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
           className="mx-auto h-16 w-auto mb-4"
         />
 
-        {/* Branding existant */}
         <AuthPageBranding />
 
         <Card className="shadow-lg border-0">
@@ -186,7 +181,6 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
             >
               {step === 1 ? (
                 <>
-                  {/* Étape 1 : infos personnelles */}
                   <div className="space-y-2">
                     <Label htmlFor="fullName">Nom complet</Label>
                     <div className="relative">
@@ -244,7 +238,6 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
                 </>
               ) : (
                 <>
-                  {/* Étape 2 : infos pharmacie */}
                   <div className="space-y-2">
                     <Label htmlFor="pharmacyName">Nom de la pharmacie</Label>
                     <div className="relative">
@@ -344,5 +337,5 @@ export default function Register({ onSwitchToLogin }: RegisterProps) {
   );
 }
 
-/* ✅ Export possible si tu veux utiliser ImageWithFallback ailleurs */
-export { ImageWithFallback };
+/* ✅ Export par défaut */
+export default ImageWithFallback;
